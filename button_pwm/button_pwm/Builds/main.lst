@@ -1,0 +1,529 @@
+   1               		.file	"main.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   8               		.text
+   9               	.Ltext0:
+ 110               	.global	green
+ 112               	green:
+ 114               	.Ltext1:
+   1:./Functions.h **** //
+   2:./Functions.h **** //  Functions.h
+   3:./Functions.h **** //  button_pwm
+   4:./Functions.h **** //
+   5:./Functions.h **** //  Created by Seth Penna on 3/17/16.
+   6:./Functions.h **** //  Copyright (c) 2016 Seth Penna. All rights reserved.
+   7:./Functions.h **** //
+   8:./Functions.h **** 
+   9:./Functions.h **** #ifndef button_pwm_Functions_h
+  10:./Functions.h **** #define button_pwm_Functions_h
+  11:./Functions.h **** 
+  12:./Functions.h **** 
+  13:./Functions.h **** void green(int intensity){
+ 116               	.LM0:
+ 117               	.LFBB1:
+ 118               	/* prologue: function */
+ 119               	/* frame size = 0 */
+ 120               	/* stack size = 0 */
+ 121               	.L__stack_usage = 0
+  14:./Functions.h ****     OCR0A = (255-intensity);
+ 123               	.LM1:
+ 124 0000 8095      		com r24
+ 125 0002 87BD      		out 0x27,r24
+ 126 0004 0895      		ret
+ 128               	.Lscope1:
+ 130               	.global	blue
+ 132               	blue:
+  15:./Functions.h **** }
+  16:./Functions.h **** 
+  17:./Functions.h **** void blue(int intensity){
+ 134               	.LM2:
+ 135               	.LFBB2:
+ 136               	/* prologue: function */
+ 137               	/* frame size = 0 */
+ 138               	/* stack size = 0 */
+ 139               	.L__stack_usage = 0
+  18:./Functions.h ****     OCR0B = (255-intensity);
+ 141               	.LM3:
+ 142 0006 8095      		com r24
+ 143 0008 88BD      		out 0x28,r24
+ 144 000a 0895      		ret
+ 146               	.Lscope2:
+ 148               	.global	red
+ 150               	red:
+  19:./Functions.h **** }
+  20:./Functions.h **** 
+  21:./Functions.h **** void red(int intensity){
+ 152               	.LM4:
+ 153               	.LFBB3:
+ 154               	/* prologue: function */
+ 155               	/* frame size = 0 */
+ 156               	/* stack size = 0 */
+ 157               	.L__stack_usage = 0
+  22:./Functions.h ****     OCR2B = (255-intensity);
+ 159               	.LM5:
+ 160 000c 8095      		com r24
+ 161 000e 8093 B400 		sts 180,r24
+ 162 0012 0895      		ret
+ 164               	.Lscope3:
+ 166               	.global	alloff
+ 168               	alloff:
+  23:./Functions.h **** }
+  24:./Functions.h **** 
+  25:./Functions.h **** void alloff(){
+ 170               	.LM6:
+ 171               	.LFBB4:
+ 172               	/* prologue: function */
+ 173               	/* frame size = 0 */
+ 174               	/* stack size = 0 */
+ 175               	.L__stack_usage = 0
+ 176               	.LBB29:
+ 177               	.LBB30:
+  22:./Functions.h ****     OCR2B = (255-intensity);
+ 179               	.LM7:
+ 180 0014 8FEF      		ldi r24,lo8(-1)
+ 181 0016 8093 B400 		sts 180,r24
+ 182               	.LBE30:
+ 183               	.LBE29:
+ 184               	.LBB31:
+ 185               	.LBB32:
+  14:./Functions.h ****     OCR0A = (255-intensity);
+ 187               	.LM8:
+ 188 001a 87BD      		out 0x27,r24
+ 189               	.LBE32:
+ 190               	.LBE31:
+ 191               	.LBB33:
+ 192               	.LBB34:
+  18:./Functions.h ****     OCR0B = (255-intensity);
+ 194               	.LM9:
+ 195 001c 88BD      		out 0x28,r24
+ 196 001e 0895      		ret
+ 197               	.LBE34:
+ 198               	.LBE33:
+ 200               	.Lscope4:
+ 202               	.global	initIO
+ 204               	initIO:
+ 206               	.Ltext2:
+   1:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** #include <stdio.h>
+   2:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** #include <avr/io.h>
+   3:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** #include <avr/interrupt.h>
+   4:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** #include <util/delay.h>
+   5:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** #include <Functions.h>
+   6:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** 
+   7:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** void initIO(void) {
+ 208               	.LM10:
+ 209               	.LFBB5:
+ 210               	/* prologue: function */
+ 211               	/* frame size = 0 */
+ 212               	/* stack size = 0 */
+ 213               	.L__stack_usage = 0
+   8:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     //Make PD5 an output
+   9:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     DDRD |= (1 << PD5);
+ 215               	.LM11:
+ 216 0020 559A      		sbi 0xa,5
+  10:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     
+  11:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     //Make PC3 an input
+  12:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     DDRC &= ~(1 << PC3);
+ 218               	.LM12:
+ 219 0022 3B98      		cbi 0x7,3
+  13:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     
+  14:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     //Enable pullup resistor on PC3
+  15:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     PORTC |= (1 << PC3);
+ 221               	.LM13:
+ 222 0024 439A      		sbi 0x8,3
+  16:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     
+  17:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     // Fast PWM mode for timers 0 and 2
+  18:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     TCCR0A |= (1 << WGM01) | (1 << WGM00);
+ 224               	.LM14:
+ 225 0026 84B5      		in r24,0x24
+ 226 0028 8360      		ori r24,lo8(3)
+ 227 002a 84BD      		out 0x24,r24
+  19:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     TCCR2A |= (1 << WGM21) | (1 << WGM20);
+ 229               	.LM15:
+ 230 002c E0EB      		ldi r30,lo8(-80)
+ 231 002e F0E0      		ldi r31,0
+ 232 0030 8081      		ld r24,Z
+ 233 0032 8360      		ori r24,lo8(3)
+ 234 0034 8083      		st Z,r24
+  20:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     
+  21:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     // clear OC0A on compare match, set on BOTTOM (inverting)
+  22:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     // 255 is fully off, 0 is fully on
+  23:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     TCCR0A |= (1 << COM0A1) | (1 << COM0A0) | (1 << COM0B1) | (1 << COM0B0);
+ 236               	.LM16:
+ 237 0036 84B5      		in r24,0x24
+ 238 0038 806F      		ori r24,lo8(-16)
+ 239 003a 84BD      		out 0x24,r24
+  24:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     TCCR2A |= (1 << COM2B1) | (1 << COM2B0);
+ 241               	.LM17:
+ 242 003c 8081      		ld r24,Z
+ 243 003e 8063      		ori r24,lo8(48)
+ 244 0040 8083      		st Z,r24
+  25:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     
+  26:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     // Use clock directly, no prescaler
+  27:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     TCCR0B |= (0 << CS02) | (0 << CS01) | (1 << CS00);
+ 246               	.LM18:
+ 247 0042 85B5      		in r24,0x25
+ 248 0044 8160      		ori r24,lo8(1)
+ 249 0046 85BD      		out 0x25,r24
+  28:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     TCCR2B |= (0 << CS22) | (0 << CS21) | (1 << CS20);
+ 251               	.LM19:
+ 252 0048 E1EB      		ldi r30,lo8(-79)
+ 253 004a F0E0      		ldi r31,0
+ 254 004c 8081      		ld r24,Z
+ 255 004e 8160      		ori r24,lo8(1)
+ 256 0050 8083      		st Z,r24
+  29:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     
+  30:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     // initialize counter for TIMER 0 and TIMER 2
+  31:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     TCNT0 = 0;
+ 258               	.LM20:
+ 259 0052 16BC      		out 0x26,__zero_reg__
+  32:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     TCNT2 = 0;
+ 261               	.LM21:
+ 262 0054 1092 B200 		sts 178,__zero_reg__
+  33:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     
+  34:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     DDRD |= ((1 << PD3) | (1 << PD5) | (1 << PD6));
+ 264               	.LM22:
+ 265 0058 8AB1      		in r24,0xa
+ 266 005a 8866      		ori r24,lo8(104)
+ 267 005c 8AB9      		out 0xa,r24
+ 268 005e 0895      		ret
+ 270               	.Lscope5:
+ 271               		.section	.text.startup,"ax",@progbits
+ 273               	.global	main
+ 275               	main:
+  35:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** }
+  36:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** 
+  37:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** 
+  38:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** 
+  39:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** int main(void)
+  40:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c **** {
+ 277               	.LM23:
+ 278               	.LFBB6:
+ 279               	/* prologue: function */
+ 280               	/* frame size = 0 */
+ 281               	/* stack size = 0 */
+ 282               	.L__stack_usage = 0
+  41:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     initIO();
+ 284               	.LM24:
+ 285 0000 0E94 0000 		call initIO
+ 286               	.L19:
+  42:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     
+  43:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     alloff();
+ 288               	.LM25:
+ 289 0004 0E94 0000 		call alloff
+  44:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     
+  45:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****     while(1){
+  46:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****         if((PINC & _BV(PC5)) == 0){
+ 291               	.LM26:
+ 292 0008 3599      		sbic 0x6,5
+ 293 000a 00C0      		rjmp .L19
+ 294 000c 80E0      		ldi r24,0
+ 295               	.L10:
+ 296               	.LBB35:
+ 297               	.LBB36:
+ 298               	.LBB37:
+ 300               	.Ltext3:
+  22:./Functions.h ****     OCR2B = (255-intensity);
+ 302               	.LM27:
+ 303 000e 8093 B400 		sts 180,r24
+ 304               	.LBE37:
+ 305               	.LBE36:
+ 306               	.LBB38:
+ 307               	.LBB39:
+  14:./Functions.h ****     OCR0A = (255-intensity);
+ 309               	.LM28:
+ 310 0012 982F      		mov r25,r24
+ 311 0014 9095      		com r25
+ 312 0016 97BD      		out 0x27,r25
+ 313               	.LBE39:
+ 314               	.LBE38:
+ 315               	.LBB40:
+ 316               	.LBB41:
+ 318               	.Ltext4:
+   1:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
+   3:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Copyright (c) 2007  Florin-Viorel Petrov
+   4:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    All rights reserved.
+   5:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+   6:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Redistribution and use in source and binary forms, with or without
+   7:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    modification, are permitted provided that the following conditions are met:
+   8:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+   9:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    * Redistributions of source code must retain the above copyright
+  10:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer.
+  11:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  12:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    * Redistributions in binary form must reproduce the above copyright
+  13:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer in
+  14:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      the documentation and/or other materials provided with the
+  15:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      distribution.
+  16:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  17:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    * Neither the name of the copyright holders nor the names of
+  18:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      contributors may be used to endorse or promote products derived
+  19:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      from this software without specific prior written permission.
+  20:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  21:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  25:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  32:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  33:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /* $Id$ */
+  34:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  35:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #ifndef _UTIL_DELAY_H_
+  36:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #define _UTIL_DELAY_H_ 1
+  37:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  38:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #ifndef __HAS_DELAY_CYCLES
+  39:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #define __HAS_DELAY_CYCLES 1
+  40:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #endif
+  41:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  42:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #include <inttypes.h>
+  43:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #include <util/delay_basic.h>
+  44:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #include <math.h>
+  45:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  46:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /** \file */
+  47:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /** \defgroup util_delay <util/delay.h>: Convenience functions for busy-wait delay loops
+  48:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     \code
+  49:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     #define F_CPU 1000000UL  // 1 MHz
+  50:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     //#define F_CPU 14.7456E6
+  51:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     #include <util/delay.h>
+  52:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     \endcode
+  53:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  54:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     \note As an alternative method, it is possible to pass the
+  55:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     F_CPU macro down to the compiler from the Makefile.
+  56:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     Obviously, in that case, no \c \#define statement should be
+  57:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     used.
+  58:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  59:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     The functions in this header file are wrappers around the basic
+  60:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     busy-wait functions from <util/delay_basic.h>.  They are meant as
+  61:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     convenience functions where actual time values can be specified
+  62:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     rather than a number of cycles to wait for.  The idea behind is
+  63:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     that compile-time constant expressions will be eliminated by
+  64:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     compiler optimization so floating-point expressions can be used
+  65:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     to calculate the number of delay cycles needed based on the CPU
+  66:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     frequency passed by the macro F_CPU.
+  67:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  68:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     \note In order for these functions to work as intended, compiler
+  69:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     optimizations <em>must</em> be enabled, and the delay time
+  70:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     <em>must</em> be an expression that is a known constant at
+  71:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     compile-time.  If these requirements are not met, the resulting
+  72:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     delay will be much longer (and basically unpredictable), and
+  73:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     applications that otherwise do not use floating-point calculations
+  74:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     will experience severe code bloat by the floating-point library
+  75:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     routines linked into the application.
+  76:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  77:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     The functions available allow the specification of microsecond, and
+  78:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     millisecond delays directly, using the application-supplied macro
+  79:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     F_CPU as the CPU clock frequency (in Hertz).
+  80:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  81:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** */
+  82:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  83:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #if !defined(__DOXYGEN__)
+  84:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** static inline void _delay_us(double __us) __attribute__((always_inline));
+  85:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** static inline void _delay_ms(double __ms) __attribute__((always_inline));
+  86:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #endif
+  87:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  88:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #ifndef F_CPU
+  89:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /* prevent compiler error by supplying a default */
+  90:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** # warning "F_CPU not defined for <util/delay.h>"
+  91:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** # define F_CPU 1000000UL
+  92:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #endif
+  93:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  94:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #ifndef __OPTIMIZE__
+  95:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** # warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+  96:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #endif
+  97:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  98:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+  99:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 100:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   __STDC_HOSTED__
+ 101:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #  include <math.h>
+ 102:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #endif
+ 103:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 104:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /**
+ 105:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    \ingroup util_delay
+ 106:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 107:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Perform a delay of \c __ms milliseconds, using _delay_loop_2().
+ 108:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 109:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    The macro F_CPU is supposed to be defined to a
+ 110:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    constant defining the CPU clock frequency (in Hertz).
+ 111:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 112:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    The maximal possible delay is 262.14 ms / F_CPU in MHz.
+ 113:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 114:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    When the user request delay which exceed the maximum possible one,
+ 115:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    _delay_ms() provides a decreased resolution functionality. In this
+ 116:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    mode _delay_ms() will work with a resolution of 1/10 ms, providing
+ 117:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    delays up to 6.5535 seconds (independent from CPU frequency).  The
+ 118:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    user will not be informed about decreased resolution.
+ 119:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 120:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    If the avr-gcc toolchain has __builtin_avr_delay_cycles(unsigned long)
+ 121:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    support, maximal possible delay is 4294967.295 ms/ F_CPU in MHz. For
+ 122:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    values greater than the maximal possible delay, overflows results in
+ 123:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    no delay i.e., 0ms.
+ 124:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 125:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Conversion of __us into clock cycles may not always result in integer.
+ 126:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    By default, the clock cycles rounded up to next integer. This ensures that
+ 127:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    the user gets atleast __us microseconds of delay.
+ 128:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 129:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Alternatively, user can define __DELAY_ROUND_DOWN__ and __DELAY_ROUND_CLOSEST__
+ 130:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    to round down and round to closest integer.
+ 131:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 132:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Note: The new implementation of _delay_ms(double __ms) with 
+ 133:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     __builtin_avr_delay_cycles(unsigned long) support is not backward compatible. 
+ 134:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    User can define __DELAY_BACKWARD_COMPATIBLE__ to get a backward compatible delay.
+ 135:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Also, the backward compatible
+ 136:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    algorithm will be chosen if the code is compiled in a <em>freestanding
+ 137:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    environment</em> (GCC option \c -ffreestanding), as the math functions
+ 138:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    required for rounding are not available to the compiler then.
+ 139:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 140:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****  */
+ 141:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** void
+ 142:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** _delay_ms(double __ms)
+ 143:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** {
+ 144:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	double __tmp ; 
+ 145:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+ 146:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 147:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   __STDC_HOSTED__
+ 148:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	uint32_t __ticks_dc;
+ 149:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	extern void __builtin_avr_delay_cycles(unsigned long);
+ 150:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	__tmp = ((F_CPU) / 1e3) * __ms;
+ 151:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 152:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	#if defined(__DELAY_ROUND_DOWN__)
+ 153:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)fabs(__tmp);
+ 154:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 155:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	#elif defined(__DELAY_ROUND_CLOSEST__)
+ 156:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(fabs(__tmp)+0.5);
+ 157:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 158:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	#else
+ 159:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 		//round up by default
+ 160:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+ 161:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	#endif
+ 162:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 163:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	__builtin_avr_delay_cycles(__ticks_dc);
+ 320               	.LM29:
+ 321 0018 E7EE      		ldi r30,lo8(999)
+ 322 001a F3E0      		ldi r31,hi8(999)
+ 323 001c 3197      		1: sbiw r30,1
+ 324 001e 01F4      		brne 1b
+ 325 0020 00C0      		rjmp .
+ 326 0022 0000      		nop
+ 327 0024 8F5F      		subi r24,lo8(-(1))
+ 328               	.LBE41:
+ 329               	.LBE40:
+ 331               	.Ltext5:
+  47:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****             for(int i = 0; i < 255; i++){
+ 333               	.LM30:
+ 334 0026 8F3F      		cpi r24,lo8(-1)
+ 335 0028 01F4      		brne .L10
+ 337               	.LM31:
+ 338 002a 8FEF      		ldi r24,lo8(-1)
+ 339 002c 90E0      		ldi r25,0
+ 340               	.L12:
+ 341 002e 282F      		mov r18,r24
+ 342 0030 2095      		com r18
+ 343               	.LBE35:
+ 344               	.LBB42:
+ 345               	.LBB43:
+ 346               	.LBB44:
+ 348               	.Ltext6:
+  14:./Functions.h ****     OCR0A = (255-intensity);
+ 350               	.LM32:
+ 351 0032 27BD      		out 0x27,r18
+ 352               	.LBE44:
+ 353               	.LBE43:
+ 354               	.LBB45:
+ 355               	.LBB46:
+  18:./Functions.h ****     OCR0B = (255-intensity);
+ 357               	.LM33:
+ 358 0034 88BD      		out 0x28,r24
+ 359               	.LBE46:
+ 360               	.LBE45:
+ 361               	.LBB47:
+ 362               	.LBB48:
+ 364               	.Ltext7:
+ 366               	.LM34:
+ 367 0036 E7EE      		ldi r30,lo8(999)
+ 368 0038 F3E0      		ldi r31,hi8(999)
+ 369 003a 3197      		1: sbiw r30,1
+ 370 003c 01F4      		brne 1b
+ 371 003e 00C0      		rjmp .
+ 372 0040 0000      		nop
+ 373               	.LBE48:
+ 374               	.LBE47:
+ 376               	.Ltext8:
+  48:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****                 red(255-i);
+  49:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****                 green(i);
+  50:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****                 _delay_ms(0.25);
+  51:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****             }
+  52:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****             for(int k = 255; k >= 0; k--){
+ 378               	.LM35:
+ 379 0042 0197      		sbiw r24,1
+ 380 0044 00F4      		brcc .L12
+ 381 0046 8FEF      		ldi r24,lo8(-1)
+ 382               	.L14:
+ 383               	.LBE42:
+ 384               	.LBB49:
+ 385               	.LBB50:
+ 386               	.LBB51:
+ 388               	.Ltext9:
+  22:./Functions.h ****     OCR2B = (255-intensity);
+ 390               	.LM36:
+ 391 0048 8093 B400 		sts 180,r24
+ 392               	.LBE51:
+ 393               	.LBE50:
+ 394               	.LBB52:
+ 395               	.LBB53:
+  18:./Functions.h ****     OCR0B = (255-intensity);
+ 397               	.LM37:
+ 398 004c 982F      		mov r25,r24
+ 399 004e 9095      		com r25
+ 400 0050 98BD      		out 0x28,r25
+ 401               	.LBE53:
+ 402               	.LBE52:
+ 403               	.LBB54:
+ 404               	.LBB55:
+ 406               	.Ltext10:
+ 408               	.LM38:
+ 409 0052 E7EE      		ldi r30,lo8(999)
+ 410 0054 F3E0      		ldi r31,hi8(999)
+ 411 0056 3197      		1: sbiw r30,1
+ 412 0058 01F4      		brne 1b
+ 413 005a 00C0      		rjmp .
+ 414 005c 0000      		nop
+ 415 005e 8150      		subi r24,lo8(-(-1))
+ 416               	.LBE55:
+ 417               	.LBE54:
+ 419               	.Ltext11:
+  53:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****                 green(k);
+  54:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****                 blue(255-k);
+  55:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****                 _delay_ms(0.25);
+  56:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****             }
+  57:/Users/sethpenna/Desktop/button_pwm/button_pwm/main.c ****             for(int j = 0; j < 255; j++){
+ 421               	.LM39:
+ 422 0060 01F4      		brne .L14
+ 423 0062 00C0      		rjmp .L19
+ 424               	.LBE49:
+ 429               	.Lscope6:
+ 430               		.text
+ 432               	.Letext0:
+ 433               		.ident	"GCC: (GNU) 4.8.1"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7VuMHw.s:2      *ABS*:0000003e __SP_H__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7VuMHw.s:3      *ABS*:0000003d __SP_L__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7VuMHw.s:4      *ABS*:0000003f __SREG__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7VuMHw.s:5      *ABS*:00000000 __tmp_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7VuMHw.s:6      *ABS*:00000001 __zero_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7VuMHw.s:112    .text:00000000 green
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7VuMHw.s:132    .text:00000006 blue
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7VuMHw.s:150    .text:0000000c red
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7VuMHw.s:168    .text:00000014 alloff
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7VuMHw.s:204    .text:00000020 initIO
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7VuMHw.s:275    .text.startup:00000000 main
+
+NO UNDEFINED SYMBOLS

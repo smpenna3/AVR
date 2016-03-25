@@ -1,0 +1,73 @@
+   1               		.file	"main.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   8               		.text
+   9               	.Ltext0:
+ 101               		.section	.text.startup,"ax",@progbits
+ 103               	.global	main
+ 105               	main:
+   1:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c **** #include <avr/io.h>
+   2:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c **** #include <util/delay.h>
+   3:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c **** 
+   4:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c **** int main(void)
+   5:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c **** {
+ 107               	.LM0:
+ 108               	.LFBB1:
+ 109               	/* prologue: function */
+ 110               	/* frame size = 0 */
+ 111               	/* stack size = 0 */
+ 112               	.L__stack_usage = 0
+   6:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****     //Make all port D output
+   7:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****     DDRD |= (1 << PD5);
+ 114               	.LM1:
+ 115 0000 559A      		sbi 0xa,5
+   8:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****     
+   9:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****     //Make all port C input
+  10:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****     DDRC &= ~(1 << PC5);
+ 117               	.LM2:
+ 118 0002 3D98      		cbi 0x7,5
+  11:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****     
+  12:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****     PORTC |= (1 << PC5);
+ 120               	.LM3:
+ 121 0004 459A      		sbi 0x8,5
+  13:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****     
+  14:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****     while(1){
+  15:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****         //If switch is pressed
+  16:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****         while((PINC & _BV(PD5)) == 0){
+  17:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****             PORTD = 0xFF;
+ 123               	.LM4:
+ 124 0006 8FEF      		ldi r24,lo8(-1)
+ 125               	.L2:
+  16:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****         while((PINC & _BV(PD5)) == 0){
+ 127               	.LM5:
+ 128 0008 3599      		sbic 0x6,5
+ 129 000a 00C0      		rjmp .L6
+ 131               	.LM6:
+ 132 000c 8BB9      		out 0xb,r24
+ 133 000e 00C0      		rjmp .L2
+ 134               	.L6:
+  18:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****         }
+  19:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****         
+  20:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****         PORTD = 0x00;
+ 136               	.LM7:
+ 137 0010 1BB8      		out 0xb,__zero_reg__
+  21:/Users/sethpenna/Desktop/Button_LED/Button_LED/main.c ****     }
+ 139               	.LM8:
+ 140 0012 00C0      		rjmp .L2
+ 142               	.Lscope1:
+ 143               		.text
+ 145               	.Letext0:
+ 146               		.ident	"GCC: (GNU) 4.8.1"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cccPNEga.s:2      *ABS*:0000003e __SP_H__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cccPNEga.s:3      *ABS*:0000003d __SP_L__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cccPNEga.s:4      *ABS*:0000003f __SREG__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cccPNEga.s:5      *ABS*:00000000 __tmp_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cccPNEga.s:6      *ABS*:00000001 __zero_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cccPNEga.s:105    .text.startup:00000000 main
+
+NO UNDEFINED SYMBOLS

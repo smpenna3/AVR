@@ -1,0 +1,65 @@
+   1               		.file	"main.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   8               		.text
+   9               	.Ltext0:
+ 110               	.global	initIO
+ 112               	initIO:
+   1:/Users/sethpenna/Desktop/Test/Test/main.c **** #include <stdio.h>
+   2:/Users/sethpenna/Desktop/Test/Test/main.c **** #include <avr/io.h>
+   3:/Users/sethpenna/Desktop/Test/Test/main.c **** #include <avr/interrupt.h>
+   4:/Users/sethpenna/Desktop/Test/Test/main.c **** #include <util/delay.h>
+   5:/Users/sethpenna/Desktop/Test/Test/main.c **** 
+   6:/Users/sethpenna/Desktop/Test/Test/main.c **** void initIO(void) {
+ 114               	.LM0:
+ 115               	.LFBB1:
+ 116               	/* prologue: function */
+ 117               	/* frame size = 0 */
+ 118               	/* stack size = 0 */
+ 119               	.L__stack_usage = 0
+ 120 0000 0895      		ret
+ 122               	.Lscope1:
+ 123               		.section	.text.startup,"ax",@progbits
+ 125               	.global	main
+ 127               	main:
+   7:/Users/sethpenna/Desktop/Test/Test/main.c **** 	
+   8:/Users/sethpenna/Desktop/Test/Test/main.c **** }
+   9:/Users/sethpenna/Desktop/Test/Test/main.c **** 
+  10:/Users/sethpenna/Desktop/Test/Test/main.c **** int main(void) {
+ 129               	.LM1:
+ 130               	.LFBB2:
+ 131               	/* prologue: function */
+ 132               	/* frame size = 0 */
+ 133               	/* stack size = 0 */
+ 134               	.L__stack_usage = 0
+  11:/Users/sethpenna/Desktop/Test/Test/main.c **** 	initIO();
+  12:/Users/sethpenna/Desktop/Test/Test/main.c ****     
+  13:/Users/sethpenna/Desktop/Test/Test/main.c ****     //Set the LED pin to output
+  14:/Users/sethpenna/Desktop/Test/Test/main.c ****     DDRD |= _BV(PD3);
+ 136               	.LM2:
+ 137 0000 539A      		sbi 0xa,3
+  15:/Users/sethpenna/Desktop/Test/Test/main.c ****     
+  16:/Users/sethpenna/Desktop/Test/Test/main.c ****     //Set the LED pin to low
+  17:/Users/sethpenna/Desktop/Test/Test/main.c ****     PORTD |= _BV(PD3);
+ 139               	.LM3:
+ 140 0002 5B9A      		sbi 0xb,3
+ 141               	.L3:
+ 142 0004 00C0      		rjmp .L3
+ 144               	.Lscope2:
+ 145               		.text
+ 147               	.Letext0:
+ 148               		.ident	"GCC: (GNU) 4.8.1"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7qrT2d.s:2      *ABS*:0000003e __SP_H__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7qrT2d.s:3      *ABS*:0000003d __SP_L__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7qrT2d.s:4      *ABS*:0000003f __SREG__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7qrT2d.s:5      *ABS*:00000000 __tmp_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7qrT2d.s:6      *ABS*:00000001 __zero_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7qrT2d.s:112    .text:00000000 initIO
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc7qrT2d.s:127    .text.startup:00000000 main
+
+NO UNDEFINED SYMBOLS

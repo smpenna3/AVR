@@ -1,0 +1,87 @@
+   1               		.file	"main.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.startup,"ax",@progbits
+  11               	.global	main
+  13               	main:
+  14               	.LFB7:
+  15               		.file 1 "main.c"
+   1:main.c        **** #include <stdio.h>
+   2:main.c        **** #include <avr/io.h>
+   3:main.c        **** #include <avr/interrupt.h>
+   4:main.c        **** #include <util/delay.h>
+   5:main.c        **** 
+   6:main.c        **** 
+   7:main.c        **** int main(void) {
+  16               		.loc 1 7 0
+  17               		.cfi_startproc
+  18               	/* prologue: function */
+  19               	/* frame size = 0 */
+  20               	/* stack size = 0 */
+  21               	.L__stack_usage = 0
+   8:main.c        ****     
+   9:main.c        ****     //Set LED pins to output
+  10:main.c        ****     DDRD |= (1 << PD5);
+  22               		.loc 1 10 0
+  23 0000 559A      		sbi 0xa,5
+  11:main.c        ****     DDRD |= (1 << PD6);
+  24               		.loc 1 11 0
+  25 0002 569A      		sbi 0xa,6
+  12:main.c        ****     DDRD |= (1 << PD7);
+  26               		.loc 1 12 0
+  27 0004 579A      		sbi 0xa,7
+  13:main.c        ****     
+  14:main.c        ****     //Set button pin to input
+  15:main.c        ****     DDRB |= (0 << PB1);
+  28               		.loc 1 15 0
+  29 0006 84B1      		in r24,0x4
+  30 0008 84B9      		out 0x4,r24
+  31               	.LVL0:
+  32               	.L2:
+  16:main.c        ****     
+  17:main.c        ****     int time_delay = 500;
+  18:main.c        ****     
+  19:main.c        ****     int i = 0;
+  20:main.c        ****     
+  21:main.c        ****     while(1){
+  22:main.c        ****         
+  23:main.c        ****         //If the button is pressed
+  24:main.c        ****         if(PINB & (1 << PB1) == 1){
+  33               		.loc 1 24 0
+  34 000a 83B1      		in r24,0x3
+  25:main.c        ****             i++;
+  26:main.c        ****             if(i = 3){i = 0;}
+  27:main.c        ****         }
+  28:main.c        ****         
+  29:main.c        ****         if(i == 0){
+  30:main.c        ****             PORTD |= (1 << PD6);
+  35               		.loc 1 30 0
+  36 000c 5E9A      		sbi 0xb,6
+  31:main.c        ****             PORTD &= ~(1 << PD5);
+  37               		.loc 1 31 0
+  38 000e 5D98      		cbi 0xb,5
+  32:main.c        ****             PORTD &= ~(1 << PD7);
+  39               		.loc 1 32 0
+  40 0010 5F98      		cbi 0xb,7
+  41 0012 00C0      		rjmp .L2
+  42               		.cfi_endproc
+  43               	.LFE7:
+  45               		.text
+  46               	.Letext0:
+  47               		.file 2 "/usr/local/CrossPack-AVR-20131216/avr/include/stdint.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccyBNmk4.s:2      *ABS*:0000003e __SP_H__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccyBNmk4.s:3      *ABS*:0000003d __SP_L__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccyBNmk4.s:4      *ABS*:0000003f __SREG__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccyBNmk4.s:5      *ABS*:00000000 __tmp_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccyBNmk4.s:6      *ABS*:00000001 __zero_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccyBNmk4.s:13     .text.startup:00000000 main
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,58 @@
+   1               		.file	"main.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  10               		.section	.text.startup,"ax",@progbits
+  11               	.global	main
+  13               	main:
+  14               	.LFB6:
+  15               		.file 1 "main.c"
+   1:main.c        **** #include <avr/io.h>
+   2:main.c        **** #include <util/delay.h>
+   3:main.c        **** 
+   4:main.c        **** int main(void)
+   5:main.c        **** {
+  16               		.loc 1 5 0
+  17               		.cfi_startproc
+  18               	/* prologue: function */
+  19               	/* frame size = 0 */
+  20               	/* stack size = 0 */
+  21               	.L__stack_usage = 0
+   6:main.c        ****     //Make all port D output
+   7:main.c        ****     DDRD = 0xFF;
+  22               		.loc 1 7 0
+  23 0000 8FEF      		ldi r24,lo8(-1)
+  24 0002 8AB9      		out 0xa,r24
+   8:main.c        ****     
+   9:main.c        ****     //Make all port C input
+  10:main.c        ****     DDRC = 0x00;
+  25               		.loc 1 10 0
+  26 0004 17B8      		out 0x7,__zero_reg__
+  27               	.L2:
+  11:main.c        ****     
+  12:main.c        ****         while(1){
+  13:main.c        ****             //If switch is pressed
+  14:main.c        ****             if(PINC & (1<<PC5) == 1){
+  28               		.loc 1 14 0
+  29 0006 86B1      		in r24,0x6
+  30 0008 00C0      		rjmp .L2
+  31               		.cfi_endproc
+  32               	.LFE6:
+  34               		.text
+  35               	.Letext0:
+  36               		.file 2 "/usr/local/CrossPack-AVR-20131216/avr/include/stdint.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc0peHYG.s:2      *ABS*:0000003e __SP_H__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc0peHYG.s:3      *ABS*:0000003d __SP_L__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc0peHYG.s:4      *ABS*:0000003f __SREG__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc0peHYG.s:5      *ABS*:00000000 __tmp_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc0peHYG.s:6      *ABS*:00000001 __zero_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//cc0peHYG.s:13     .text.startup:00000000 main
+
+NO UNDEFINED SYMBOLS

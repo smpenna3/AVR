@@ -1,0 +1,505 @@
+   1               		.file	"main.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   8               		.text
+   9               	.Ltext0:
+ 110               	.global	initIO
+ 112               	initIO:
+   1:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** #define F_CPU 2000000UL
+   2:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** 
+   3:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** #include <stdio.h>
+   4:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** #include <avr/io.h>
+   5:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** #include <avr/interrupt.h>
+   6:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** #include <util/delay.h>
+   7:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** 
+   8:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** #define green PA7
+   9:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** #define red PA6
+  10:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** #define blue PA5
+  11:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** #define white PA0
+  12:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** 
+  13:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** 
+  14:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** void initIO(void) {
+ 114               	.LM0:
+ 115               	.LFBB1:
+ 116               	/* prologue: function */
+ 117               	/* frame size = 0 */
+ 118               	/* stack size = 0 */
+ 119               	.L__stack_usage = 0
+  15:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     //Set fast PWM for timer 0
+  16:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     TCCR0A |= ((1 << WGM01) | (1 << WGM00));
+ 121               	.LM1:
+ 122 0000 80B7      		in r24,0x30
+ 123 0002 8360      		ori r24,lo8(3)
+ 124 0004 80BF      		out 0x30,r24
+  17:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     TCCR1A |= ((1 << WGM01) | (1 << WGM00));
+ 126               	.LM2:
+ 127 0006 8FB5      		in r24,0x2f
+ 128 0008 8360      		ori r24,lo8(3)
+ 129 000a 8FBD      		out 0x2f,r24
+  18:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     
+  19:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     // clear OC0A on compare match, set on BOTTOM (inverting)
+  20:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     // 255 is fully off, 0 is fully on
+  21:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     TCCR0A |= ((1 << COM0A1) | (1 << COM0A0));
+ 131               	.LM3:
+ 132 000c 80B7      		in r24,0x30
+ 133 000e 806C      		ori r24,lo8(-64)
+ 134 0010 80BF      		out 0x30,r24
+  22:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     TCCR1A |= ((1 << COM0A1) | (1 << COM0A0));
+ 136               	.LM4:
+ 137 0012 8FB5      		in r24,0x2f
+ 138 0014 806C      		ori r24,lo8(-64)
+ 139 0016 8FBD      		out 0x2f,r24
+  23:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     
+  24:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     //Use clock directly, no prescaler
+  25:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     TCCR0B |= ((0 << CS02) | (0 << CS01) | (1 << CS00));
+ 141               	.LM5:
+ 142 0018 83B7      		in r24,0x33
+ 143 001a 8160      		ori r24,lo8(1)
+ 144 001c 83BF      		out 0x33,r24
+  26:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     TCCR1B |= ((0 << CS02) | (0 << CS01) | (1 << CS00));
+ 146               	.LM6:
+ 147 001e 8EB5      		in r24,0x2e
+ 148 0020 8160      		ori r24,lo8(1)
+ 149 0022 8EBD      		out 0x2e,r24
+  27:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     
+  28:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     //Initialize counter for timer 0
+  29:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     TCNT0 = 0;
+ 151               	.LM7:
+ 152 0024 12BE      		out 0x32,__zero_reg__
+  30:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     TCNT1 = 0;
+ 154               	.LM8:
+ 155 0026 1DBC      		out 0x2c+1,__zero_reg__
+ 156 0028 1CBC      		out 0x2c,__zero_reg__
+  31:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     
+  32:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     //Set LED pins as output
+  33:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****     DDRA |= ((1 << green) | (1 << blue) | (1 << red) | (1 << white));
+ 158               	.LM9:
+ 159 002a 8AB3      		in r24,0x1a
+ 160 002c 816E      		ori r24,lo8(-31)
+ 161 002e 8ABB      		out 0x1a,r24
+ 162 0030 0895      		ret
+ 164               	.Lscope1:
+ 165               		.section	.text.startup,"ax",@progbits
+ 167               	.global	main
+ 169               	main:
+  34:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** }
+  35:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** 
+  36:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** int main(void) {
+ 171               	.LM10:
+ 172               	.LFBB2:
+ 173               	/* prologue: function */
+ 174               	/* frame size = 0 */
+ 175               	/* stack size = 0 */
+ 176               	.L__stack_usage = 0
+  37:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** 	initIO();
+ 178               	.LM11:
+ 179 0000 00D0      		rcall initIO
+ 180               	.LBB20:
+  38:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** 
+  39:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c **** 	while (1) {
+  40:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         // fade green up
+  41:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int i = 0; i < 256; i++)
+ 182               	.LM12:
+ 183 0002 80E0      		ldi r24,0
+ 184 0004 90E0      		ldi r25,0
+ 185               	.LBE20:
+ 186               	.LBB23:
+  42:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         {
+  43:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             OCR1B = (255-i);
+  44:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             _delay_ms(2);
+  45:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         }
+  46:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         // fade green down
+  47:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int j = 255; j >= 0; j--)
+ 188               	.LM13:
+ 189 0006 2FEF      		ldi r18,lo8(-1)
+ 190 0008 30E0      		ldi r19,0
+ 191               	.L3:
+ 192               	.LBE23:
+ 193               	.LBB26:
+  41:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int i = 0; i < 256; i++)
+ 195               	.LM14:
+ 196 000a 8F3F      		cpi r24,-1
+ 197 000c 9105      		cpc r25,__zero_reg__
+ 198 000e 01F0      		breq .+2
+ 199 0010 04F4      		brge .L17
+  43:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             OCR1B = (255-i);
+ 201               	.LM15:
+ 202 0012 A901      		movw r20,r18
+ 203 0014 481B      		sub r20,r24
+ 204 0016 590B      		sbc r21,r25
+ 205 0018 59BD      		out 0x28+1,r21
+ 206 001a 48BD      		out 0x28,r20
+ 207               	.LBB21:
+ 208               	.LBB22:
+ 210               	.Ltext1:
+   1:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
+   3:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Copyright (c) 2007  Florin-Viorel Petrov
+   4:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    All rights reserved.
+   5:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+   6:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Redistribution and use in source and binary forms, with or without
+   7:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    modification, are permitted provided that the following conditions are met:
+   8:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+   9:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    * Redistributions of source code must retain the above copyright
+  10:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer.
+  11:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  12:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    * Redistributions in binary form must reproduce the above copyright
+  13:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer in
+  14:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      the documentation and/or other materials provided with the
+  15:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      distribution.
+  16:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  17:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    * Neither the name of the copyright holders nor the names of
+  18:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      contributors may be used to endorse or promote products derived
+  19:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****      from this software without specific prior written permission.
+  20:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  21:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  25:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  32:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  33:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /* $Id$ */
+  34:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  35:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #ifndef _UTIL_DELAY_H_
+  36:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #define _UTIL_DELAY_H_ 1
+  37:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  38:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #ifndef __HAS_DELAY_CYCLES
+  39:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #define __HAS_DELAY_CYCLES 1
+  40:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #endif
+  41:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  42:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #include <inttypes.h>
+  43:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #include <util/delay_basic.h>
+  44:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #include <math.h>
+  45:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  46:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /** \file */
+  47:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /** \defgroup util_delay <util/delay.h>: Convenience functions for busy-wait delay loops
+  48:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     \code
+  49:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     #define F_CPU 1000000UL  // 1 MHz
+  50:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     //#define F_CPU 14.7456E6
+  51:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     #include <util/delay.h>
+  52:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     \endcode
+  53:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  54:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     \note As an alternative method, it is possible to pass the
+  55:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     F_CPU macro down to the compiler from the Makefile.
+  56:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     Obviously, in that case, no \c \#define statement should be
+  57:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     used.
+  58:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  59:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     The functions in this header file are wrappers around the basic
+  60:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     busy-wait functions from <util/delay_basic.h>.  They are meant as
+  61:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     convenience functions where actual time values can be specified
+  62:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     rather than a number of cycles to wait for.  The idea behind is
+  63:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     that compile-time constant expressions will be eliminated by
+  64:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     compiler optimization so floating-point expressions can be used
+  65:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     to calculate the number of delay cycles needed based on the CPU
+  66:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     frequency passed by the macro F_CPU.
+  67:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  68:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     \note In order for these functions to work as intended, compiler
+  69:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     optimizations <em>must</em> be enabled, and the delay time
+  70:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     <em>must</em> be an expression that is a known constant at
+  71:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     compile-time.  If these requirements are not met, the resulting
+  72:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     delay will be much longer (and basically unpredictable), and
+  73:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     applications that otherwise do not use floating-point calculations
+  74:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     will experience severe code bloat by the floating-point library
+  75:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     routines linked into the application.
+  76:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  77:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     The functions available allow the specification of microsecond, and
+  78:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     millisecond delays directly, using the application-supplied macro
+  79:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     F_CPU as the CPU clock frequency (in Hertz).
+  80:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  81:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** */
+  82:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  83:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #if !defined(__DOXYGEN__)
+  84:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** static inline void _delay_us(double __us) __attribute__((always_inline));
+  85:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** static inline void _delay_ms(double __ms) __attribute__((always_inline));
+  86:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #endif
+  87:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  88:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #ifndef F_CPU
+  89:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /* prevent compiler error by supplying a default */
+  90:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** # warning "F_CPU not defined for <util/delay.h>"
+  91:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** # define F_CPU 1000000UL
+  92:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #endif
+  93:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  94:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #ifndef __OPTIMIZE__
+  95:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** # warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+  96:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #endif
+  97:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+  98:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+  99:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 100:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   __STDC_HOSTED__
+ 101:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #  include <math.h>
+ 102:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #endif
+ 103:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 104:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** /**
+ 105:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    \ingroup util_delay
+ 106:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 107:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Perform a delay of \c __ms milliseconds, using _delay_loop_2().
+ 108:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 109:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    The macro F_CPU is supposed to be defined to a
+ 110:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    constant defining the CPU clock frequency (in Hertz).
+ 111:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 112:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    The maximal possible delay is 262.14 ms / F_CPU in MHz.
+ 113:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 114:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    When the user request delay which exceed the maximum possible one,
+ 115:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    _delay_ms() provides a decreased resolution functionality. In this
+ 116:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    mode _delay_ms() will work with a resolution of 1/10 ms, providing
+ 117:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    delays up to 6.5535 seconds (independent from CPU frequency).  The
+ 118:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    user will not be informed about decreased resolution.
+ 119:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 120:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    If the avr-gcc toolchain has __builtin_avr_delay_cycles(unsigned long)
+ 121:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    support, maximal possible delay is 4294967.295 ms/ F_CPU in MHz. For
+ 122:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    values greater than the maximal possible delay, overflows results in
+ 123:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    no delay i.e., 0ms.
+ 124:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 125:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Conversion of __us into clock cycles may not always result in integer.
+ 126:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    By default, the clock cycles rounded up to next integer. This ensures that
+ 127:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    the user gets atleast __us microseconds of delay.
+ 128:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 129:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Alternatively, user can define __DELAY_ROUND_DOWN__ and __DELAY_ROUND_CLOSEST__
+ 130:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    to round down and round to closest integer.
+ 131:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 132:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Note: The new implementation of _delay_ms(double __ms) with 
+ 133:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****     __builtin_avr_delay_cycles(unsigned long) support is not backward compatible. 
+ 134:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    User can define __DELAY_BACKWARD_COMPATIBLE__ to get a backward compatible delay.
+ 135:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    Also, the backward compatible
+ 136:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    algorithm will be chosen if the code is compiled in a <em>freestanding
+ 137:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    environment</em> (GCC option \c -ffreestanding), as the math functions
+ 138:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****    required for rounding are not available to the compiler then.
+ 139:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 140:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****  */
+ 141:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** void
+ 142:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** _delay_ms(double __ms)
+ 143:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** {
+ 144:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	double __tmp ; 
+ 145:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+ 146:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 147:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h ****   __STDC_HOSTED__
+ 148:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	uint32_t __ticks_dc;
+ 149:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	extern void __builtin_avr_delay_cycles(unsigned long);
+ 150:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	__tmp = ((F_CPU) / 1e3) * __ms;
+ 151:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 152:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	#if defined(__DELAY_ROUND_DOWN__)
+ 153:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)fabs(__tmp);
+ 154:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 155:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	#elif defined(__DELAY_ROUND_CLOSEST__)
+ 156:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(fabs(__tmp)+0.5);
+ 157:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 158:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	#else
+ 159:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 		//round up by default
+ 160:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+ 161:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	#endif
+ 162:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 
+ 163:/usr/local/CrossPack-AVR-20131216/avr/include/util/delay.h **** 	__builtin_avr_delay_cycles(__ticks_dc);
+ 212               	.LM16:
+ 213 001c E7EE      		ldi r30,lo8(999)
+ 214 001e F3E0      		ldi r31,hi8(999)
+ 215 0020 3197      		1: sbiw r30,1
+ 216 0022 01F4      		brne 1b
+ 217 0024 00C0      		rjmp .
+ 218 0026 0000      		nop
+ 219               	.LBE22:
+ 220               	.LBE21:
+ 222               	.Ltext2:
+  41:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int i = 0; i < 256; i++)
+ 224               	.LM17:
+ 225 0028 0196      		adiw r24,1
+ 226 002a 00C0      		rjmp .L3
+ 227               	.L17:
+  41:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int i = 0; i < 256; i++)
+ 229               	.LM18:
+ 230 002c 80E0      		ldi r24,0
+ 231 002e 90E0      		ldi r25,0
+ 232               	.L6:
+ 233               	.LBE26:
+ 234               	.LBB27:
+  48:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         {
+  49:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             OCR1B = (255-j);
+ 236               	.LM19:
+ 237 0030 99BD      		out 0x28+1,r25
+ 238 0032 88BD      		out 0x28,r24
+ 239               	.LBB24:
+ 240               	.LBB25:
+ 242               	.Ltext3:
+ 244               	.LM20:
+ 245 0034 E7EE      		ldi r30,lo8(999)
+ 246 0036 F3E0      		ldi r31,hi8(999)
+ 247 0038 3197      		1: sbiw r30,1
+ 248 003a 01F4      		brne 1b
+ 249 003c 00C0      		rjmp .
+ 250 003e 0000      		nop
+ 251 0040 0196      		adiw r24,1
+ 252               	.LBE25:
+ 253               	.LBE24:
+ 255               	.Ltext4:
+  47:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int j = 255; j >= 0; j--)
+ 257               	.LM21:
+ 258 0042 8115      		cp r24,__zero_reg__
+ 259 0044 F1E0      		ldi r31,1
+ 260 0046 9F07      		cpc r25,r31
+ 261 0048 01F4      		brne .L6
+  47:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int j = 255; j >= 0; j--)
+ 263               	.LM22:
+ 264 004a 8FEF      		ldi r24,lo8(-1)
+ 265 004c 90E0      		ldi r25,0
+ 266               	.L8:
+ 267               	.LBE27:
+ 268               	.LBB28:
+  50:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             _delay_ms(2);
+  51:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         }
+  52:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         
+  53:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         
+  54:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         //fade blue up
+  55:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int i = 0; i < 256; i++)
+  56:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         {
+  57:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             OCR1A = (255-i);
+ 270               	.LM23:
+ 271 004e 9BBD      		out 0x2a+1,r25
+ 272 0050 8ABD      		out 0x2a,r24
+ 273               	.LBB29:
+ 274               	.LBB30:
+ 276               	.Ltext5:
+ 278               	.LM24:
+ 279 0052 E7EE      		ldi r30,lo8(999)
+ 280 0054 F3E0      		ldi r31,hi8(999)
+ 281 0056 3197      		1: sbiw r30,1
+ 282 0058 01F4      		brne 1b
+ 283 005a 00C0      		rjmp .
+ 284 005c 0000      		nop
+ 285               	.LBE30:
+ 286               	.LBE29:
+ 287 005e 0197      		sbiw r24,1
+ 288 0060 00F4      		brcc .L8
+ 290               	.Ltext6:
+  55:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int i = 0; i < 256; i++)
+ 292               	.LM25:
+ 293 0062 80E0      		ldi r24,0
+ 294 0064 90E0      		ldi r25,0
+ 295               	.L10:
+ 296               	.LBE28:
+ 297               	.LBB31:
+  58:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             _delay_ms(2);
+  59:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         }
+  60:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         // fade blue down
+  61:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int j = 255; j >= 0; j--)
+  62:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         {
+  63:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             OCR1A = (255-j);
+ 299               	.LM26:
+ 300 0066 9BBD      		out 0x2a+1,r25
+ 301 0068 8ABD      		out 0x2a,r24
+ 302               	.LBB32:
+ 303               	.LBB33:
+ 305               	.Ltext7:
+ 307               	.LM27:
+ 308 006a E7EE      		ldi r30,lo8(999)
+ 309 006c F3E0      		ldi r31,hi8(999)
+ 310 006e 3197      		1: sbiw r30,1
+ 311 0070 01F4      		brne 1b
+ 312 0072 00C0      		rjmp .
+ 313 0074 0000      		nop
+ 314 0076 0196      		adiw r24,1
+ 315               	.LBE33:
+ 316               	.LBE32:
+ 318               	.Ltext8:
+  61:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int j = 255; j >= 0; j--)
+ 320               	.LM28:
+ 321 0078 8115      		cp r24,__zero_reg__
+ 322 007a F1E0      		ldi r31,1
+ 323 007c 9F07      		cpc r25,r31
+ 324 007e 01F4      		brne .L10
+  61:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int j = 255; j >= 0; j--)
+ 326               	.LM29:
+ 327 0080 8FEF      		ldi r24,lo8(-1)
+ 328 0082 90E0      		ldi r25,0
+ 329               	.L12:
+ 330               	.LBE31:
+ 331               	.LBB34:
+  64:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             _delay_ms(2);
+  65:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         }
+  66:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         
+  67:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         //fade red up
+  68:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int i = 0; i < 256; i++)
+  69:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         {
+  70:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             OCR0B = (255-i);
+ 333               	.LM30:
+ 334 0084 8CBF      		out 0x3c,r24
+ 335               	.LBB35:
+ 336               	.LBB36:
+ 338               	.Ltext9:
+ 340               	.LM31:
+ 341 0086 E7EE      		ldi r30,lo8(999)
+ 342 0088 F3E0      		ldi r31,hi8(999)
+ 343 008a 3197      		1: sbiw r30,1
+ 344 008c 01F4      		brne 1b
+ 345 008e 00C0      		rjmp .
+ 346 0090 0000      		nop
+ 347               	.LBE36:
+ 348               	.LBE35:
+ 349 0092 0197      		sbiw r24,1
+ 350 0094 00F4      		brcc .L12
+ 352               	.Ltext10:
+  68:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int i = 0; i < 256; i++)
+ 354               	.LM32:
+ 355 0096 80E0      		ldi r24,0
+ 356 0098 90E0      		ldi r25,0
+ 357               	.L14:
+ 358               	.LBE34:
+ 359               	.LBB37:
+  71:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             _delay_ms(2);
+  72:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         }
+  73:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         // fade red down
+  74:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int j = 255; j >= 0; j--)
+  75:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         {
+  76:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****             OCR0B = (255-j);
+ 361               	.LM33:
+ 362 009a 8CBF      		out 0x3c,r24
+ 363               	.LBB38:
+ 364               	.LBB39:
+ 366               	.Ltext11:
+ 368               	.LM34:
+ 369 009c E7EE      		ldi r30,lo8(999)
+ 370 009e F3E0      		ldi r31,hi8(999)
+ 371 00a0 3197      		1: sbiw r30,1
+ 372 00a2 01F4      		brne 1b
+ 373 00a4 00C0      		rjmp .
+ 374 00a6 0000      		nop
+ 375 00a8 0196      		adiw r24,1
+ 376               	.LBE39:
+ 377               	.LBE38:
+ 379               	.Ltext12:
+  74:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int j = 255; j >= 0; j--)
+ 381               	.LM35:
+ 382 00aa 8115      		cp r24,__zero_reg__
+ 383 00ac F1E0      		ldi r31,1
+ 384 00ae 9F07      		cpc r25,r31
+ 385 00b0 01F4      		brne .L14
+ 386               	.LBE37:
+ 387               	.LBB40:
+  41:/Users/sethpenna/Desktop/AtTiny_RGB_LED_Strip/AtTiny_RGB_LED_Strip/main.c ****         for (int i = 0; i < 256; i++)
+ 389               	.LM36:
+ 390 00b2 80E0      		ldi r24,0
+ 391 00b4 90E0      		ldi r25,0
+ 392 00b6 00C0      		rjmp .L3
+ 393               	.LBE40:
+ 404               	.Lscope2:
+ 405               		.text
+ 407               	.Letext0:
+ 408               		.ident	"GCC: (GNU) 4.8.1"
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccX4cP0R.s:2      *ABS*:0000003e __SP_H__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccX4cP0R.s:3      *ABS*:0000003d __SP_L__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccX4cP0R.s:4      *ABS*:0000003f __SREG__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccX4cP0R.s:5      *ABS*:00000000 __tmp_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccX4cP0R.s:6      *ABS*:00000001 __zero_reg__
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccX4cP0R.s:112    .text:00000000 initIO
+/var/folders/7r/172l2v6s1790wxggh2qc74fc0000gn/T//ccX4cP0R.s:169    .text.startup:00000000 main
+
+NO UNDEFINED SYMBOLS
